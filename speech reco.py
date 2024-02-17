@@ -1,15 +1,14 @@
 import cv2
 import pytesseract
 from deep_translator import GoogleTranslator, single_detection
-import speech_recognition as sr
+
 
 pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract\\tesseract.exe'
 
 # Initialize the camera
 cap = cv2.VideoCapture(0)  # 0 represents the default camera
 
-# Initialize speech recognition
-recognizer = sr.Recognizer()
+
 
 # Prompt the user for their preference
 user_input = input("Select translation option:\n1. English to Japanese ('ej')\n2. Japanese to English ('je')\n3. English to Tagalog ('et')\n4. Tagalog to English ('te')\n5. Japanese to Tagalog ('jt')\n6. Tagalog to Japanese ('tj')\nPress Enter for default (English to Japanese): ")
@@ -46,28 +45,7 @@ while True:
         else:
             text = pytesseract.image_to_string(gray)
 
-    elif input_type.lower() == 's':
-        # Use speech recognition to capture user input
-        with sr.Microphone() as source:
-            print("Say something:")
-            audio = recognizer.listen(source)
-
-        try:
-            # Recognize speech using Google Speech Recognition
-            if user_input.lower() == 'je' or user_input.lower() == 'jt':
-                # For Japanese language setting
-                text = recognizer.recognize_google(audio, language='ja-JP')
-            else:
-                # For default language setting (English)
-                text = recognizer.recognize_google(audio)
-            print("You said:", text)
-        except sr.UnknownValueError:
-            print("Could not understand audio.")
-            continue
-        except sr.RequestError as e:
-            print("Could not request results from Google Speech Recognition service; {0}".format(e))
-            break
-
+    
     else:
         print("Invalid input type. Please choose 'i' for image or 's' for speech.")
         continue
